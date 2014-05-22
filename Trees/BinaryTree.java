@@ -1,15 +1,8 @@
-
-import java.util.*;
-
 public class BinaryTree{
 	Tree root;
 	BinaryTree(){
 		root = null;
 	}
-	// Used in printing the right/left view of the tree
-	public static int maxLevel = 0;
-	// To store to the tree in vertical order
-	public static LinkedHashMap<Integer,ArrayList<Integer>> verticalOrder = new LinkedHashMap<Integer,ArrayList<Integer>>();
 
 	/*
 	 * Adding nodes to the tree
@@ -31,94 +24,20 @@ public class BinaryTree{
 		}
 		return node;
 	}
-	/**
-	 * calls printVerticalOrder(node, level) function that populates the verticalOrder LinkedHashMap
-	 * and prints the vertical order of the tree
-	 * @param root root of the tree
-	 */
-	public void printVerticalOrder(Tree root){
-		printVerticalOrder(root,0);
-		System.out.println("\nVertical Order: ");
-		for(Integer i : verticalOrder.keySet()){
-			for(Integer j : verticalOrder.get(i))
-				System.out.print(j + " ");
-			System.out.println();
-		}
-			
-	}
-	/**
-	 * Populates the verticalOrder LinkedHashMap based on the distance of the node from the root
-	 * decrement level by 1 on moving right from root and increment by 1 on moving left
-	 * @param node Tree node, initialized to root
-	 * @param level Distance from the root
-	 */
-	public static void printVerticalOrder(Tree node, int level){
-		if(node == null)
-			return;
-		// Add the node to the hash map with its level as the key
-		if(verticalOrder.get(level) == null)
-			verticalOrder.put(level,new ArrayList<Integer>());
-		verticalOrder.get(level).add(node.value);
-		printVerticalOrder(node.left, level + 1); /*Increment by 1 if moving to the left*/
-		printVerticalOrder(node.right, level - 1); /*Decrement by 1 if moving to the right*/
-	}
-	/**
-	 * 
-	 * @param node current node, initially the root
-	 * @param level current level of node. Initialized to 1
-	 * maxLevel maximum level of the tree seen so far
-	 */
-	public void printRightView(Tree node, int level){
-		if(node == null)
-			return;
-		if(maxLevel < level){			/* print current node if a new level is reached */
-			System.out.print(node.value + " ");
-			maxLevel = level;
-		}
-		printRightView(node.right, level + 1);	/*traverse the right child first since we want to print the Tree's right view*/
-		printRightView(node.left, level + 1);
-	}
-	/**
-	 * 
-	 * @param node current node, initially the target node
-	 * @param level current level of node, initially 0
-	 * @param k distance from target node
-	 */
-	public void printNodesAtDistK(Tree node, int level, int k){
-		if(node == null || level > k)
-			return;
-		if(level == k)
-			System.out.print(node.value + " ");
-		printNodesAtDistK(node.left, level + 1, k);
-		printNodesAtDistK(node.right, level + 1, k);
-		
-	}
 	/*
 	 * Display level order of tree
 	 */
 	public void displayLevelOrder(){
 		int size = countNode(root);
-		int currentLevel, nextLevel = 0;
 		Q q = new Q(size);
 		q.push(root);
-		currentLevel = 1;
 		while(!(q.isempty())){
 			Tree node = q.pop();
-			currentLevel--;
-			System.out.print(node.value + " ");
-			if(node.left != null){
+			System.out.println(node.value);
+			if(node.left != null)
 				q.push(node.left);
-				nextLevel++;
-			}
-			if(node.right != null){
+			if(node.right != null)
 				q.push(node.right);
-				nextLevel++;
-			}
-			if(currentLevel == 0){
-				System.out.println();
-				currentLevel = nextLevel;
-				nextLevel = 0;
-			}
 		}
 		//Display the queue from front to get the reverse level order traversal of the tree
 		System.out.println("Reverse level order traversal of the tree");
@@ -126,7 +45,6 @@ public class BinaryTree{
 			System.out.println(q.queue[i].value);
 	}
 	/* 
-	 * Inorder traversal
 	 * Display left, root, right
 	 */
 	public void displayInorder(Tree node){
@@ -140,7 +58,6 @@ public class BinaryTree{
 	}
 
 	/*
-	 * Preorder traversal
 	 * Display root, left, right
 	 */
 	public void displayPreOrder(Tree node){
@@ -152,8 +69,8 @@ public class BinaryTree{
 		displayPreOrder(node.right);
 		return;
 	}
+
 	/*
-	 * Postorder traversal
 	 * Display left, right, root
 	 */
 	public void displayPostOrder(Tree node){
@@ -180,6 +97,7 @@ public class BinaryTree{
 		else
 			return node;
 	}
+
 	/*
 	 * Find the number of nodes
 	 */
@@ -192,6 +110,7 @@ public class BinaryTree{
 			return count;
 		}
 	}
+
 	/*
 	 * Calculate the height of the tree
 	 */
@@ -227,7 +146,7 @@ public class BinaryTree{
 		B1.add(14);
 		B1.add(20);
 		B1.add(1);
-		B1.add(2);
+		B1.add(0);
 		System.out.println("Inorder traversal:");
 		B1.displayInorder(B1.root);
 		System.out.println("Preorder traversal:");
@@ -236,19 +155,14 @@ public class BinaryTree{
 		B1.displayPostOrder(B1.root);
 		System.out.println("Level order Traversal:");
 		B1.displayLevelOrder();
-		System.out.println("Nodes at distance 2 from root:");
-		B1.printNodesAtDistK(B1.root, 0, 2);
-		B1.printVerticalOrder(B1.root);
-		System.out.println("\nTree after trimming:");
 		B1.root = B1.trimTree(B1.root,4,10);
-		B1.displayLevelOrder();
+		B1.displayPostOrder(B1.root);
 		int height = B1.height(B1.root);
 		System.out.println("The hieght of the tree is " + height);
 		if(B1.ifBST(B1.root, Integer.MIN_VALUE, Integer.MAX_VALUE))
 			System.out.println("The tree is a Binary search tree");
 		else
 			System.out.println("The tree is not a Binary search tree");
-		
 	}
 }
 
