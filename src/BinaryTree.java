@@ -93,6 +93,24 @@ public class BinaryTree{
 		printNodesAtDistK(node.right, level + 1, k);
 		
 	}
+	/**
+	 * find Least Common Ancestor of values n1 and n2
+	 * @param node Tree node, initialized to root
+	 * @param n1,  value n1
+	 * @param n2, value n2
+	 * @return
+	 */
+	public Tree findLCA(Tree node, int n1, int n2){
+		if(node == null)
+			return null;
+		if(node.value == n1 || node.value == n2)
+			return node;
+		Tree left_LCA = findLCA(node.left, n1, n2);
+		Tree right_LCA = findLCA(node.right, n1, n2);
+		if(left_LCA != null && right_LCA != null)
+			return node;
+		return (left_LCA != null)? left_LCA : right_LCA;
+	}
 	/*
 	 * Display level order of tree
 	 */
@@ -239,6 +257,7 @@ public class BinaryTree{
 		System.out.println("Nodes at distance 2 from root:");
 		B1.printNodesAtDistK(B1.root, 0, 2);
 		B1.printVerticalOrder(B1.root);
+		System.out.println("LCA of 2 and 7 is " + B1.findLCA(B1.root,2,7).value);
 		System.out.println("\nTree after trimming:");
 		B1.root = B1.trimTree(B1.root,4,10);
 		B1.displayLevelOrder();
