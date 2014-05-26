@@ -111,6 +111,34 @@ public class BinaryTree{
 			return node;
 		return (left_LCA != null)? left_LCA : right_LCA;
 	}
+	/**
+	 * find the length of the path between node and n
+	 * @param node Tree node
+	 * @param n value whose distance with node is to be found  
+	 * @param length Length of the path from node and n
+	 * @return length
+	 */
+	public int findLength(Tree node,int n,int length){
+		if(node == null)
+			return 0;
+		if(node.value == n)
+			return length;
+		return(findLength(node.left, n, length + 1) + findLength(node.right, n, length + 1));
+	}
+	/**
+	 * Find distance between n1 and n2
+	 * @param n1 value whose distance with n2 is to be found
+	 * @param n2 value whose distance with n1 is to be found
+	 * @return distance between n1 and n2
+	 */
+	public int findDistance(int n1, int n2){
+		int length1 = 0, length2 = 0;
+		Tree lca = findLCA(root,n1,n2);
+		length1 = findLength(lca, n1, length1);
+		length2 = findLength(lca, n2, length2);
+		return length1 + length2;
+	}
+	
 	/*
 	 * Display level order of tree
 	 */
@@ -258,6 +286,7 @@ public class BinaryTree{
 		B1.printNodesAtDistK(B1.root, 0, 2);
 		B1.printVerticalOrder(B1.root);
 		System.out.println("LCA of 2 and 7 is " + B1.findLCA(B1.root,2,7).value);
+		System.out.println("Distance between 12 and 1 is " + B1.findDistance(12, 1));
 		System.out.println("\nTree after trimming:");
 		B1.root = B1.trimTree(B1.root,4,10);
 		B1.displayLevelOrder();
